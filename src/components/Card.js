@@ -1,44 +1,35 @@
 import React, { useContext } from "react";
 import { GithubContext } from "../context/context";
 import styled from "styled-components";
-import { MdBusiness, MdLocationOn, MdLink } from "react-icons/md";
+import { GoLocation } from "react-icons/go";
+import { FcCalendar } from "react-icons/fc";
 const Card = () => {
   const { githubUser } = useContext(GithubContext);
-  const {
-    avatar_url,
-    html_url,
-    name,
-    company,
-    blog,
-    bio,
-    location,
-    twitter_username,
-  } = githubUser;
+  const { avatar_url, login, html_url, name, location, created_at } =
+    githubUser;
+  let datStr = new Date(created_at).toDateString();
+
+  console.log(datStr);
+
   return (
-    <Wrapper>
-      <header>
+    <Wrapper className="section-center">
+      <div>
         <img src={avatar_url} alt={name} />
+        <h1>{name}</h1>
+        <h2>
+          <a href={html_url}>@{login}</a>
+        </h2>
         <div>
-          <h4>{name}</h4>
-          <p>@{twitter_username || "john doe"}</p>
-        </div>
-        <a href={html_url}>follow</a>
-        <p className="bio">{bio}</p>
-        <div className="links">
-          <p>
-            <MdBusiness />
-            {company}
+          <p style={{ marginLeft: "3rem", marginRight: "3rem" }}>
+            <GoLocation />
+            <span style={{ marginLeft: "5px" }}> {location}</span>
           </p>
           <p>
-            <MdLocationOn />
-            {location || "earth"}
+            <FcCalendar />
+            <span style={{ marginLeft: "5px" }}> Joined {datStr}</span>
           </p>
-          <a href={`https://${blog}`}>
-            <MdLink />
-            {blog}
-          </a>
         </div>
-      </header>
+      </div>
     </Wrapper>
   );
 };
@@ -48,76 +39,42 @@ const Wrapper = styled.article`
   border-top-right-radius: var(--radius);
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
-  position: relative;
-  &::before {
-    content: "user";
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateY(-100%);
-    background: var(--clr-white);
-    color: var(--clr-grey-5);
-    border-top-right-radius: var(--radius);
-    border-top-left-radius: var(--radius);
-    text-transform: capitalize;
-    padding: 0.5rem 1rem 0 1rem;
-    letter-spacing: var(--spacing);
-    font-size: 1rem;
-  }
-  header {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+  margin-bottom: 2rem;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    column-gap: 1rem;
-    margin-bottom: 1rem;
     img {
-      width: 75px;
-      height: 75px;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
+      border: 8px solid #2caeba;
     }
-    h4 {
-      margin-bottom: 0.25rem;
+    h1 {
+      font-size: 2.5rem;
+      margin: 15px 0px;
     }
-    p {
-      margin-bottom: 0;
-    }
-    a {
-      color: var(--clr-primary-5);
-      border: 1px solid var(--clr-primary-5);
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      text-transform: capitalize;
-      letter-spacing: var(--spacing);
-      transition: var(--transition);
-      cursor: pointer;
+    h2 {
+      font-size: 1.5rem;
       &:hover {
-        background: var(--clr-primary-5);
-        color: var(--clr-white);
+        text-decoration: underline;
       }
     }
-  }
-  .bio {
-    color: var(--clr-grey-3);
-  }
-  .links {
-    p,
-    a {
-      margin-bottom: 0.25rem;
+    div {
       display: flex;
-      align-items: center;
-      svg {
-        margin-right: 0.5rem;
-        font-size: 1.3rem;
+      flex-direction: row;
+      justify-content: space-between;
+      p {
+        color: hsl(210, 22%, 49%);
+        font-size: 1.1rem;
       }
-    }
-    a {
-      color: var(--clr-primary-5);
-      transition: var(--transition);
-      svg {
-        color: var(--clr-grey-5);
-      }
-      &:hover {
-        color: var(--clr-primary-3);
+      @media (max-width: 576px) {
+        flex-direction: column;
+        margin: 5px;
+        p {
+          margin: 2px;
+        }
       }
     }
   }

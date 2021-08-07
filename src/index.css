@@ -181,3 +181,8 @@ p {
 main {
   padding-bottom: 2rem;
 }
+
+.repo-heading {
+  width: 200px;
+  margin: 3rem auto;
+}

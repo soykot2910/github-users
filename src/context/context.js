@@ -1,7 +1,4 @@
 import React, { useState, useEffect, createContext } from "react";
-import mockUser from "./mockData.js/mockUser";
-import mockRepos from "./mockData.js/mockRepos";
-import mockFollowers from "./mockData.js/mockFollowers";
 import axios from "axios";
 
 const rootUrl = "https://api.github.com";
@@ -9,14 +6,17 @@ const rootUrl = "https://api.github.com";
 const GithubContext = createContext();
 
 const GithubProvider = ({ children }) => {
-  const [githubUser, setGithubUser] = useState(mockUser);
-  const [repos, setRepos] = useState(mockRepos);
-  const [followers, setFollowers] = useState(mockFollowers);
+  const [initial, setInitial] = useState(true);
+  const [githubUser, setGithubUser] = useState([]);
+  const [repos, setRepos] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
   const [requests, setRequests] = useState(0);
   const [isloading, setIsLoading] = useState(false);
   const [error, setError] = useState({ show: false, msg: "" });
 
   const searchGithubUser = async (user) => {
+    setInitial(false);
     toggleError();
     setIsLoading(true);
     const response = await axios(`${rootUrl}/users/${user}`).catch((err) =>
@@ -32,6 +32,10 @@ const GithubProvider = ({ children }) => {
       //followers
       axios(`${followers_url}?per_page=100`).then((response) =>
         setFollowers(response.data)
+      );
+      //following
+      axios(`${rootUrl}/users/${login}/following`).then((response) =>
+        setFollowing(response.data)
       );
     } else {
       toggleError(true, "there is no user with that username");
@@ -63,9 +67,11 @@ const GithubProvider = ({ children }) => {
   return (
     <GithubContext.Provider
       value={{
+        initial,
         githubUser,
         repos,
         followers,
+        following,
         requests,
         error,
         searchGithubUser,
