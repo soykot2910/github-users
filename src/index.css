@@ -183,6 +183,16 @@ main {
 }
 
 .repo-heading {
-  width: 200px;
-  margin: 3rem auto;
+  margin-bottom: 30px;
+  display: flex;
+  margin-top: 30px;
+}
+.repo-heading p {
+  margin: 4px 20px;
+}
+
+.repo-heading select{
+  outline: none;
+  width: 100px;
+  border: 1px solid var(--clr-primary-10) !important;
 }
